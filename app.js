@@ -1,14 +1,6 @@
-// Firebase Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-// Your Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
   authDomain: "rhk-app-e34c6.firebaseapp.com",
@@ -19,124 +11,92 @@ const firebaseConfig = {
   measurementId: "G-814PTRRQVQ"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// -------------------- SIGN UP --------------------
+// Direct Gateway Session Interceptor
+if (!localStorage.getItem("RHKUser") && !window.location.pathname.includes("index.html") && !window.location.pathname.includes("signup.html")) {
+    window.location.href = "index.html";
+}
 
+// -------------------- REGISTRATION DISPATCHER --------------------
 const signupBtn = document.getElementById("signupBtn");
-
 if (signupBtn) {
+    signupBtn.addEventListener("click", async () => {
+        const username = document.getElementById("signupUsername").value.trim().toLowerCase();
+        const password = document.getElementById("signupPassword").value.trim();
+        const msg = document.getElementById("signupMessage");
 
-signupBtn.addEventListener("click", async () => {
+        if (!username || !password) {
+            msg.style.color = "#ff4d4d";
+            msg.innerText = "Please complete all fields.";
+            return;
+        }
 
-const username = document.getElementById("signupUsername").value.trim();
+        try {
+            msg.style.color = "#a8a8a8";
+            msg.innerText = "Verifying availability...";
+            
+            const userRef = doc(db, "users", username);
+            const userSnap = await getDoc(userRef);
 
-const password = document.getElementById("signupPassword").value.trim();
+            if (userSnap.exists()) {
+                msg.style.color = "#ff4d4d";
+                msg.innerText = "Username is already taken.";
+                return;
+            }
 
-const msg = document.getElementById("signupMessage");
-
-if(username==="" || password===""){
-msg.innerText="Fill all fields";
-return;
+            await setDoc(userRef, { username, password });
+            
+            msg.style.color = "lightgreen";
+            msg.innerText = "Account security structured. Redirecting...";
+            
+            setTimeout(() => { window.location.href = "index.html"; }, 1200);
+        } catch (err) {
+            msg.style.color = "#ff4d4d";
+            msg.innerText = "Network transmission error.";
+        }
+    });
 }
 
-const ref = doc(db,"users",username);
+// -------------------- AUTHENTICATION INTERACTION --------------------
+const loginBtn = document.getElementById("loginBtn");
+if (loginBtn) {
+    loginBtn.addEventListener("click", async () => {
+        const username = document.getElementById("loginUsername").value.trim().toLowerCase();
+        const password = document.getElementById("loginPassword").value.trim();
+        const msg = document.getElementById("loginMessage");
 
-const check = await getDoc(ref);
+        if (!username || !password) {
+            msg.style.color = "#ff4d4d";
+            msg.innerText = "Missing input credentials.";
+            return;
+        }
 
-if(check.exists()){
-msg.innerText="Username already exists";
-return;
-}
+        try {
+            msg.style.color = "#a8a8a8";
+            msg.innerText = "Authorizing identity...";
+            
+            const userRef = doc(db, "users", username);
+            const userSnap = await getDoc(userRef);
 
-await setDoc(ref,{
-username:username,
-password:password
-});
+            if (!userSnap.exists()) {
+                msg.style.color = "#ff4d4d";
+                msg.innerText = "Account matching identity not found.";
+                return;
+            }
 
-msg.style.color="lightgreen";
-msg.innerText="Account Created Successfully";
+            if (userSnap.data().password !== password) {
+                msg.style.color = "#ff4d4d";
+                msg.innerText = "Incorrect security clearance password.";
+                return;
+            }
 
-setTimeout(()=>{
-window.location="index.html";
-},1500);
-
-});
-
-}
-
-// -------------------- LOGIN --------------------
-
-const loginBtn=document.getElementById("loginBtn");
-
-if(loginBtn){
-
-loginBtn.addEventListener("click",async()=>{
-
-const username=document.getElementById("loginUsername").value.trim();
-
-const password=document.getElementById("loginPassword").value.trim();
-
-const msg=document.getElementById("loginMessage");
-
-const ref=doc(db,"users",username);
-
-const snap=await getDoc(ref);
-
-if(!snap.exists()){
-
-msg.innerText="Invalid Username";
-
-return;
-
-}
-
-const data=snap.data();
-
-if(data.password!==password){
-
-msg.innerText="Wrong Password";
-
-return;
-
-}
-
-localStorage.setItem("RHKUser",username);
-
-window.location="home.html";
-
-});
-
-}
-
-// -------------------- CHECK LOGIN --------------------
-
-if(window.location.pathname.includes("home.html")){
-
-const user=localStorage.getItem("RHKUser");
-
-if(!user){
-
-window.location="index.html";
-
-}
-
-}
-
-// -------------------- LOGOUT --------------------
-
-const logout=document.getElementById("logoutBtn");
-
-if(logout){
-
-logout.addEventListener("click",()=>{
-
-localStorage.removeItem("RHKUser");
-
-window.location="index.html";
-
-});
-
+            localStorage.setItem("RHKUser", username);
+            window.location.href = "home.html";
+        } catch (err) {
+            msg.style.color = "#ff4d4d";
+            msg.innerText = "Authentication engine timeout.";
+        }
+    });
 }
