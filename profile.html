@@ -2,132 +2,130 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>RHK Profile</title>
 
 <link rel="stylesheet" href="style.css">
 
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 <script type="module" src="profile.js"></script>
 
 </head>
 
-
 <body>
 
+<div class="app">
 
-<div class="app-shell">
+<!-- Header -->
 
+<header class="topbar">
 
-<header class="app-header">
+<i class="fa-solid fa-lock"></i>
 
-<div class="logo">
+<div class="logo" id="profileUsername">
 RHK
 </div>
 
-<a href="home.html" class="icon-btn">
-←
-</a>
+<div>
+
+<i class="fa-solid fa-bars icon"></i>
+
+</div>
 
 </header>
 
+<!-- Profile -->
 
+<section class="profile-head">
 
-
-<section class="profile-header">
-
-
-<img 
+<img
 id="profileDP"
 class="profile-dp"
 src="https://i.pravatar.cc/150"
-alt="Profile Picture"
->
-
+alt="Profile">
 
 <div class="profile-info">
 
-<h2 id="profileUsername">
+<h2 id="username">
 Username
 </h2>
 
+<div class="stats">
 
-<p id="postCount">
-0 Posts
-</p>
+<div>
 
+<b id="postCount">0</b>
+
+<p>Posts</p>
 
 </div>
 
+<div>
+
+<b id="followersCount">0</b>
+
+<p>Followers</p>
+
+</div>
+
+<div>
+
+<b id="followingCount">0</b>
+
+<p>Following</p>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
+<!-- Bio -->
 
-
-
-
-<div class="profile-bio">
+<div style="padding:0 15px 10px;">
 
 <p id="profileBio">
-Bio
+
+Welcome to RHK
+
 </p>
 
 </div>
 
+<!-- Edit -->
 
+<div style="padding:0 15px;">
 
+<button id="editBtn">
 
+Edit Profile
 
-<div style="padding:15px">
+</button>
 
+</div>
 
-<h3>
-Change Profile Picture
-</h3>
+<!-- Edit Section -->
 
-
-<br>
-
-
-<input 
-type="file"
-id="dpUpload"
-accept="image/*"
->
-
-
-
-<br><br>
-
-
+<div id="editSection" style="display:none;padding:15px;">
 
 <input
-
-type="text"
-
-id="bioInput"
-
-placeholder="Write your bio"
-
-style="
-width:100%;
-padding:12px;
-background:#111;
-color:white;
-border:1px solid #333;
-border-radius:10px;
-"
-
->
-
-
+type="file"
+id="dpUpload"
+accept="image/*">
 
 <br><br>
 
+<textarea
+id="bioInput"
+placeholder="Write your bio"></textarea>
 
+<br><br>
 
 <button id="saveProfile">
 
@@ -135,68 +133,50 @@ Save Profile
 
 </button>
 
+</div>
 
+<!-- Story Highlights -->
+
+<div class="stories">
+
+<div class="story">
+
+<img src="https://i.pravatar.cc/150?img=1">
+
+<p>Travel</p>
 
 </div>
 
+<div class="story">
 
+<img src="https://i.pravatar.cc/150?img=2">
 
-
-
-
-
-<h3 style="padding:15px">
-
-My Posts
-
-</h3>
-
-
-
-
-<div 
-id="myPosts"
-class="profile-grid"
->
+<p>Food</p>
 
 </div>
 
+<div class="story">
 
+<img src="https://i.pravatar.cc/150?img=3">
 
-
-
-
-<nav class="navigation-bar">
-
-
-<a href="home.html" class="nav-item">
-🏠
-</a>
-
-
-<a href="upload.html" class="nav-item">
-➕
-</a>
-
-
-<a href="messages.html" class="nav-item">
-💬
-</a>
-
-
-<a href="profile.html" class="nav-item">
-👤
-</a>
-
-
-</nav>
-
-
+<p>Work</p>
 
 </div>
 
+</div>
 
+<!-- Tabs -->
 
-</body>
+<div style="display:flex;justify-content:space-around;border-top:1px solid #262626;border-bottom:1px solid #262626;padding:10px;">
 
-</html>
+<i class="fa-solid fa-table-cells-large"></i>
+
+<i class="fa-solid fa-film"></i>
+
+<i class="fa-regular fa-bookmark"></i>
+
+<i class="fa-solid fa-user-tag"></i>
+
+</div>
+
+<!-- Posts -->
