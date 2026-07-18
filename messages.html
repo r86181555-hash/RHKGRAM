@@ -5,98 +5,142 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>RHK Messages</title>
 
 <link rel="stylesheet" href="style.css">
 
-<script type="module" src="chat.js"></script>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<script type="module" src="messages.js"></script>
 
 </head>
 
-
 <body>
 
+<div class="app">
 
-<div class="app-shell">
+<header class="topbar">
 
+<a href="home.html">
 
-<header class="app-header">
+<i class="fa-solid fa-arrow-left icon"></i>
 
-<div class="logo">
-Messages
-</div>
-
-
-<a href="home.html" class="icon-btn">
-←
 </a>
 
+<div class="logo">
+
+Messages
+
+</div>
+
+<i class="fa-regular fa-pen-to-square icon"></i>
 
 </header>
 
+<!-- Search -->
 
+<div style="padding:15px;">
 
+<input
+type="text"
+id="searchChat"
+placeholder="Search users...">
 
-<div class="chat-container">
+</div>
 
+<!-- Users -->
 
-<h3>
-Chat with user
-</h3>
+<div id="chatUsers">
 
+</div>
 
-<input 
-id="receiver"
-placeholder="Enter username"
+<!-- Chat Window -->
+
+<div id="chatWindow" style="display:none;">
+
+<div id="chatHeader"
 style="
-width:100%;
-padding:12px;
-background:#111;
-color:white;
-border:1px solid #333;
-border-radius:10px;
-margin:10px 0;
-"
->
+display:flex;
+align-items:center;
+padding:15px;
+border-top:1px solid #222;
+border-bottom:1px solid #222;
+">
 
+<img
+id="chatDP"
+style="
+width:45px;
+height:45px;
+border-radius:50%;
+margin-right:10px;
+">
 
-
-
-<div id="messages">
-
-</div>
-
-
-
+<h3 id="chatName"></h3>
 
 </div>
 
+<div
+id="messages"
+style="
+height:55vh;
+overflow-y:auto;
+padding:15px;
+">
 
+</div>
 
+<div
+style="
+display:flex;
+padding:15px;
+gap:10px;
+">
 
+<input
+id="messageInput"
+placeholder="Message...">
 
-<div class="chat-input">
+<button
+id="sendBtn"
+style="width:80px;">
 
-
-<input 
-id="messageText"
-placeholder="Type message..."
->
-
-
-<button id="sendBtn">
 Send
+
 </button>
 
+</div>
 
 </div>
 
+<nav class="bottom">
 
+<a href="home.html">
+<i class="fa-solid fa-house"></i>
+</a>
+
+<a href="search.html">
+<i class="fa-solid fa-magnifying-glass"></i>
+</a>
+
+<a href="upload.html">
+<i class="fa-regular fa-square-plus"></i>
+</a>
+
+<a href="reels.html">
+<i class="fa-solid fa-clapperboard"></i>
+</a>
+
+<a href="profile.html">
+<i class="fa-regular fa-circle-user"></i>
+</a>
+
+</nav>
 
 </div>
-
 
 </body>
 
