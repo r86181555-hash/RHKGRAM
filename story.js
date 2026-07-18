@@ -1,246 +1,152 @@
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
-
 getFirestore,
 collection,
 addDoc,
 getDocs,
+query,
+orderBy,
 serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
+  authDomain: "rhk-app-e34c6.firebaseapp.com",
+  projectId: "rhk-app-e34c6",
+  storageBucket: "rhk-app-e34c6.firebasestorage.app",
+  messagingSenderId: "1016565109006",
+  appId: "1:1016565109006:web:eb7ec260a601a16e5ac75f",
+  measurementId: "G-814PTRRQVQ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const CLOUD_NAME = "nhy9lfkt";
+const UPLOAD_PRESET = "rhk_upload";
+
+const currentUser = localStorage.getItem("RHKUser");
+
+const fileInput = document.getElementById("storyFile");
+const preview = document.getElementById("preview");
+const uploadBtn = document.getElementById("uploadStory");
+const caption = document.getElementById("storyCaption");
+const status = document.getElementById("status");
+const feed = document.getElementById("storyFeed");
+
+fileInput.onchange = () => {
+
+const file = fileInput.files[0];
+
+if(!file) return;
+
+if(file.type.startsWith("image")){
+
+preview.src = URL.createObjectURL(file);
+
+}else{
+
+preview.outerHTML = `
+<video
+id="preview"
+controls
+autoplay
+style="
+width:100%;
+max-height:420px;
+border-radius:15px;
+">
+<source src="${URL.createObjectURL(file)}">
+</video>
+`;
 
 }
 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-
-const firebaseConfig={
-
-apiKey:"AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
-
-authDomain:"rhk-app-e34c6.firebaseapp.com",
-
-projectId:"rhk-app-e34c6",
-
-storageBucket:"rhk-app-e34c6.firebasestorage.app",
-
-messagingSenderId:"1016565109006",
-
-appId:"1:1016565109006:web:eb7ec260a601a16e5ac75f"
-
 };
 
+uploadBtn.onclick = async()=>{
 
+const file = fileInput.files[0];
 
-const app=initializeApp(firebaseConfig);
+if(!file){
 
-const db=getFirestore(app);
-
-
-
-const user=localStorage.getItem("RHKUser");
-
-
-
-const CLOUD_NAME="nhy9lfkt";
-
-const UPLOAD_PRESET="rhk_upload";
-
-
-
-const file=document.getElementById("storyFile");
-
-const btn=document.getElementById("uploadStory");
-
-const status=document.getElementById("storyStatus");
-
-
-
-btn.onclick=async()=>{
-
-
-let selected=file.files[0];
-
-
-if(!selected){
-
-status.innerHTML="Select image/video";
+alert("Select image or video");
 
 return;
 
 }
 
-
-
-try{
-
-
 status.innerHTML="Uploading...";
 
+const form = new FormData();
 
+form.append("file",file);
 
-let form=new FormData();
+form.append("upload_preset",UPLOAD_PRESET);
 
+const type=file.type.startsWith("video")?"video":"image";
 
-form.append("file",selected);
-
-
-form.append(
-"upload_preset",
-UPLOAD_PRESET
-);
-
-
-
-let res=await fetch(
-
-`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
-
+const res = await fetch(
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${type}/upload`,
 {
-
 method:"POST",
-
 body:form
-
 }
-
 );
 
+const data = await res.json();
 
+await addDoc(collection(db,"stories"),{
 
-let data=await res.json();
-
-
-
-await addDoc(
-
-collection(db,"stories"),
-
-{
-
-
-username:user,
-
+username:currentUser,
 
 media:data.secure_url,
 
+caption:caption.value,
 
-type:selected.type.startsWith("video")
-
-?"video":"image",
-
+type:type,
 
 createdAt:serverTimestamp()
 
+});
 
-}
+status.innerHTML="Story Uploaded";
 
-);
-
-
-
-status.innerHTML="Story added ✅";
-
-
-}
-
-
-catch(e){
-
-status.innerHTML=e.message;
-
-}
-
+loadStories();
 
 };
 
-
-
-
-
-
 async function loadStories(){
 
-
-let result=await getDocs(
-collection(db,"stories")
+const q=query(
+collection(db,"stories"),
+orderBy("createdAt","desc")
 );
 
+const snap=await getDocs(q);
 
+feed.innerHTML="";
 
-let box=document.getElementById("storyView");
+snap.forEach(doc=>{
 
+const s=doc.data();
 
-box.innerHTML="";
+feed.innerHTML += `
 
+<div class="story">
 
+<img
+src="https://i.pravatar.cc/150?u=${s.username}">
 
-result.forEach(s=>{
-
-
-let data=s.data();
-
-
-
-if(data.type==="video"){
-
-
-box.innerHTML+=`
-
-<div>
-
-<h3>${data.username}</h3>
-
-<video 
-src="${data.media}"
-controls
-style="
-width:100%;
-height:400px;
-object-fit:cover;
-">
-
-</video>
+<p>${s.username}</p>
 
 </div>
 
 `;
-
-
-}
-
-else{
-
-
-box.innerHTML+=`
-
-<div>
-
-<h3>${data.username}</h3>
-
-<img 
-src="${data.media}"
-style="
-width:100%;
-height:400px;
-object-fit:cover;
-">
-
-</div>
-
-`;
-
-
-}
-
 
 });
 
-
 }
-
-
 
 loadStories();
