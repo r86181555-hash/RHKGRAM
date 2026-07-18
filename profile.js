@@ -1,9 +1,7 @@
 import {initializeApp}
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-
 import {
-
 getFirestore,
 doc,
 getDoc,
@@ -12,30 +10,18 @@ collection,
 getDocs,
 query,
 where
-
 }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-
-
 const firebaseConfig={
-
 apiKey:"AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
-
 authDomain:"rhk-app-e34c6.firebaseapp.com",
-
 projectId:"rhk-app-e34c6",
-
 storageBucket:"rhk-app-e34c6.firebasestorage.app",
-
 messagingSenderId:"1016565109006",
-
 appId:"1:1016565109006:web:eb7ec260a601a16e5ac75f"
-
 };
-
 
 
 const app=initializeApp(firebaseConfig);
@@ -43,94 +29,69 @@ const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
 
-
 const username=localStorage.getItem("RHKUser");
 
 
-
-if(!username){
-
-location.href="index.html";
-
-}
-
-
+const CLOUD_NAME="nhy9lfkt";
+const UPLOAD_PRESET="rhk_upload";
 
 
 const dp=document.getElementById("profileDP");
-
 const name=document.getElementById("profileUsername");
-
 const bio=document.getElementById("profileBio");
-
 const posts=document.getElementById("myPosts");
 
-
+const dpInput=document.getElementById("dpUpload");
+const save=document.getElementById("saveProfile");
 
 
 
 async function loadProfile(){
 
 
-let ref=doc(db,"users",username);
+const userRef=doc(db,"users",username);
 
-
-let snap=await getDoc(ref);
-
+const snap=await getDoc(userRef);
 
 
 if(snap.exists()){
 
-
 let data=snap.data();
-
 
 name.innerHTML=data.username;
 
+dp.src=data.dp || "https://i.pravatar.cc/150";
 
-dp.src=data.dp;
-
-
-bio.innerHTML=data.bio;
-
+bio.innerHTML=data.bio || "";
 
 }
 
 
 
-
-
 let q=query(
-
 collection(db,"posts"),
-
 where("username","==",username)
-
 );
-
 
 
 let result=await getDocs(q);
 
 
-
 posts.innerHTML="";
 
 
-
-document.getElementById("postCount")
-.innerHTML=result.size+" Posts";
-
+document.getElementById("postCount").innerHTML=
+result.size+" Posts";
 
 
-result.forEach(p=>{
+
+result.forEach(post=>{
 
 
-let data=p.data();
+let data=post.data();
 
 
 if(data.type==="video"){
-
 
 posts.innerHTML+=`
 
@@ -138,10 +99,7 @@ posts.innerHTML+=`
 
 `;
 
-}
-
-
-else{
+}else{
 
 
 posts.innerHTML+=`
@@ -166,12 +124,61 @@ loadProfile();
 
 
 
-// SAVE PROFILE
+save.onclick=async()=>{
 
 
-document
-.getElementById("saveProfile")
-.onclick=async()=>{
+try{
+
+
+// DP upload
+
+let file=dpInput.files[0];
+
+
+let imageURL=null;
+
+
+
+if(file){
+
+
+let form=new FormData();
+
+
+form.append("file",file);
+
+form.append(
+"upload_preset",
+UPLOAD_PRESET
+);
+
+
+
+let upload=await fetch(
+
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+
+{
+
+method:"POST",
+
+body:form
+
+}
+
+);
+
+
+
+let data=await upload.json();
+
+
+imageURL=data.secure_url;
+
+
+}
+
+
 
 
 
@@ -181,24 +188,48 @@ let bioText=document
 
 
 
+
+let updateData={
+
+bio:bioText
+
+};
+
+
+
+if(imageURL){
+
+updateData.dp=imageURL;
+
+}
+
+
+
+
 await updateDoc(
 
 doc(db,"users",username),
 
-{
-
-
-bio:bioText
-
-
-}
-
+updateData
 
 );
 
 
 
+alert("Profile updated ✅");
+
+
 location.reload();
+
+
+
+}
+
+catch(error){
+
+alert(error.message);
+
+}
 
 
 };
