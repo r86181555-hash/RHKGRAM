@@ -1,231 +1,467 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy, doc, getDoc, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+query,
+orderBy,
+doc,
+updateDoc,
+arrayUnion
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
-  authDomain: "rhk-app-e34c6.firebaseapp.com",
-  projectId: "rhk-app-e34c6",
-  storageBucket: "rhk-app-e34c6.firebasestorage.app",
-  messagingSenderId: "1016565109006",
-  appId: "1:1016565109006:web:eb7ec260a601a16e5ac75f",
-  measurementId: "G-814PTRRQVQ"
+
+apiKey: "AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
+
+authDomain: "rhk-app-e34c6.firebaseapp.com",
+
+projectId: "rhk-app-e34c6",
+
+storageBucket: "rhk-app-e34c6.firebasestorage.app",
+
+messagingSenderId: "1016565109006",
+
+appId: "1:1016565109006:web:eb7ec260a601a16e5ac75f"
+
 };
 
+
+
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-const activeUser = localStorage.getItem("RHKUser");
-if (!activeUser) { window.location.href = "index.html"; }
+const db=getFirestore(app);
 
-const CLOUD_NAME = "nhy9lfkt";
-const UPLOAD_PRESET = "rhk_upload";
 
-const feedElement = document.getElementById("feed");
-const dynamicStoriesContainer = document.getElementById("dynamicStoriesContainer");
-const storyFileInput = document.getElementById("storyFileInput");
-const currentUserStoryNode = document.getElementById("currentUserStoryNode");
-const currentUserStoryAvatar = document.getElementById("currentUserStoryAvatar");
 
-// Story Viewing Modal Targets
-const storyModal = document.getElementById("storyModal");
-const storyModalBar = document.getElementById("storyModalBar");
-const storyModalAvatar = document.getElementById("storyModalAvatar");
-const storyModalUser = document.getElementById("storyModalUser");
-const storyModalImage = document.getElementById("storyModalImage");
-const storyModalClose = document.getElementById("storyModalClose");
+const user=localStorage.getItem("RHKUser");
 
-let cachedProfiles = {};
-let storyTimeoutId = null;
 
-async function fetchUserProfileData(username) {
-    if (cachedProfiles[username]) return cachedProfiles[username];
-    try {
-        const pRef = doc(db, "profiles", username);
-        const pSnap = await getDoc(pRef);
-        if (pSnap.exists()) {
-            cachedProfiles[username] = pSnap.data();
-            return cachedProfiles[username];
-        }
-    } catch(e) {}
-    return { username, avatar: `https://i.pravatar.cc/150?u=${username}`, bio: "" };
+if(!user){
+
+location.href="index.html";
+
 }
 
-async function renderLifecycleComponents() {
-    const myProfile = await fetchUserProfileData(activeUser);
-    if(currentUserStoryAvatar) currentUserStoryAvatar.src = myProfile.avatar;
-    
-    await loadStoriesTrack();
-    await loadTimelineFeed();
+
+
+const feed=document.getElementById("feed");
+
+
+
+
+
+async function loadPosts(){
+
+
+try{
+
+
+let q=query(
+collection(db,"posts"),
+orderBy("createdAt","desc")
+);
+
+
+
+let result=await getDocs(q);
+
+
+
+feed.innerHTML="";
+
+
+
+if(result.empty){
+
+
+feed.innerHTML=`
+
+<div style="padding:50px;text-align:center">
+
+<h3>No posts yet</h3>
+
+<p>Upload first post 🚀</p>
+
+</div>
+
+`;
+
+return;
+
+
 }
 
-async function loadStoriesTrack() {
-    if(!dynamicStoriesContainer) return;
-    try {
-        const sQuery = query(collection(db, "stories"), orderBy("createdAt", "desc"));
-        const sSnapshot = await getDocs(sQuery);
-        dynamicStoriesContainer.innerHTML = "";
-        
-        const strictTimeBoundary = Date.now() - (24 * 60 * 60 * 1000); // 24 Hours filter context logic
-        let uniqueTrackUsers = new Set();
-        
-        sSnapshot.forEach(item => {
-            const data = item.data();
-            const createdMs = data.createdAt ? data.createdAt.toMillis() : Date.now();
-            
-            if (createdMs > strictTimeBoundary && data.username !== activeUser) {
-                if (!uniqueTrackUsers.has(data.username)) {
-                    uniqueTrackUsers.add(data.username);
-                    buildStoryItemUI(data.username, data.image);
-                }
-            }
-        });
-    } catch(err) {}
+
+
+
+
+result.forEach(post=>{
+
+
+let data=post.data();
+
+
+
+let media="";
+
+
+
+if(data.type==="video"){
+
+
+media=`
+
+<video class="post-main-video" controls>
+
+<source src="${data.media}">
+
+</video>
+
+`;
+
 }
 
-async function buildStoryItemUI(username, imageUrl) {
-    const prof = await fetchUserProfileData(username);
-    const node = document.createElement("div");
-    node.className = "story-node";
-    node.innerHTML = `
-        <div class="story-ring"><img src="${prof.avatar}" alt="${username}"></div>
-        <div class="story-label">${username}</div>
-    `;
-    node.addEventListener("click", () => activateStoryModal(username, imageUrl, prof.avatar));
-    dynamicStoriesContainer.appendChild(node);
+
+else{
+
+
+media=`
+
+<img class="post-main-img" src="${data.media}">
+
+`;
+
 }
 
-if(currentUserStoryNode) {
-    currentUserStoryNode.addEventListener("click", () => storyFileInput.click());
+
+
+
+
+let likes=data.likes || 0;
+
+
+let comments=data.comments || [];
+
+
+
+feed.innerHTML += `
+
+
+
+<article class="post-card">
+
+
+
+<div class="post-user-bar">
+
+
+<img class="post-user-avatar"
+
+src="${data.dp || 'https://i.pravatar.cc/150'}">
+
+
+<span class="post-username-label">
+
+${data.username}
+
+</span>
+
+
+</div>
+
+
+
+
+
+<div class="post-media-frame">
+
+
+${media}
+
+
+</div>
+
+
+
+
+
+
+<div class="post-engagement-bar">
+
+
+<div>
+
+
+<span class="action-trigger like-btn"
+
+data-id="${post.id}">
+
+❤️ ${likes}
+
+</span>
+
+
+
+<span class="action-trigger">
+
+💬
+
+</span>
+
+
+
+</div>
+
+
+
+<span>
+
+🔖
+
+</span>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="post-narrative">
+
+
+<b>${data.username}</b>
+
+<p>${escapeHTML(data.caption || "")}</p>
+
+
+</div>
+
+
+
+
+
+
+<div class="comment-list">
+
+
+${
+
+comments.map(c=>`
+
+<p>
+
+<b>${c.user}</b> ${c.text}
+
+</p>
+
+`).join("")
+
 }
 
-if(storyFileInput) {
-    storyFileInput.addEventListener("change", async (e) => {
-        const file = e.target.files[0];
-        if(!file) return;
-        
-        try {
-            currentUserStoryNode.style.opacity = "0.4";
-            const formPack = new FormData();
-            formPack.append("file", file);
-            formPack.append("upload_preset", UPLOAD_PRESET);
 
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-                method: "POST", body: formPack
-            });
-            const data = await res.json();
-            
-            if(data.secure_url) {
-                await addDoc(collection(db, "stories"), {
-                    username: activeUser,
-                    image: data.secure_url,
-                    createdAt: serverTimestamp()
-                });
-                alert("Story asset deployed successfully.");
-                await loadStoriesTrack();
-            }
-        } catch(e) {
-            alert("Story asset distribution network fault.");
-        } finally {
-            currentUserStoryNode.style.opacity = "1";
-        }
-    });
+</div>
+
+
+
+
+
+
+<div class="comment-box">
+
+
+<input 
+
+id="comment-${post.id}"
+
+placeholder="Add comment...">
+
+
+
+<button 
+
+onclick="addComment('${post.id}')">
+
+Send
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+</article>
+
+
+`;
+
+
+
+});
+
+
+
+
+
+document.querySelectorAll(".like-btn")
+.forEach(btn=>{
+
+
+btn.onclick=async()=>{
+
+
+let id=btn.dataset.id;
+
+
+let ref=doc(db,"posts",id);
+
+
+await updateDoc(ref,{
+
+likes:likes+1
+
+});
+
+
+loadPosts();
+
+
+};
+
+
+
+});
+
+
+
+
 }
 
-function activateStoryModal(username, src, avatar) {
-    if(!storyModal) return;
-    storyModalAvatar.src = avatar;
-    storyModalUser.innerText = username;
-    storyModalImage.src = src;
-    storyModal.style.display = "flex";
-    
-    storyModalBar.style.width = "0%";
-    let startTime = null;
-    const duration = 4000;
-    
-    function animateProgress(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const runtime = timestamp - startTime;
-        const progressPct = Math.min((runtime / duration) * 100, 100);
-        storyModalBar.style.width = `${progressPct}%`;
-        
-        if (runtime < duration) {
-            storyTimeoutId = requestAnimationFrame(animateProgress);
-        } else {
-            closeStoryModalViewport();
-        }
-    }
-    storyTimeoutId = requestAnimationFrame(animateProgress);
+
+catch(e){
+
+
+feed.innerHTML="Unable to load feed";
+
+
 }
 
-function closeStoryModalViewport() {
-    if(storyTimeoutId) {
-        cancelAnimationFrame(storyTimeoutId);
-        storyTimeoutId = null;
-    }
-    if(storyModal) storyModal.style.display = "none";
+
+
 }
 
-if(storyModalClose) storyModalClose.addEventListener("click", closeStoryModalViewport);
 
-async function loadTimelineFeed() {
-    if(!feedElement) return;
-    try {
-        feedElement.innerHTML = `<div style="text-align:center;padding:40px;color:#737373;">Syncing ecosystem feed pipeline...</div>`;
-        const fQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(fQuery);
-        feedElement.innerHTML = "";
 
-        if (snapshot.empty) {
-            feedElement.innerHTML = `
-                <div style="text-align:center; padding:60px 20px; color:#737373;">
-                    <span style="font-size: 32px;">📭</span>
-                    <h3 style="color:#fff; margin-top:8px; font-size:16px;">Timeline Feed Empty</h3>
-                </div>
-            `;
-            return;
-        }
 
-        for (const docInstance of snapshot.docs) {
-            const data = docInstance.data();
-            const profile = await fetchUserProfileData(data.username);
-            
-            const cardMarkup = `
-                <article class="post-card">
-                    <div class="post-header">
-                        <img class="post-avatar" src="${profile.avatar}" alt="DP">
-                        <span class="post-user">${data.username || 'anonymous'}</span>
-                    </div>
-                    <div class="post-frame">
-                        <img class="post-img" src="${data.image}" alt="Media Content" loading="lazy">
-                    </div>
-                    <div class="post-actions">
-                        <div class="post-actions-left"><span>🤍</span><span>💬</span><span>📤</span></div>
-                        <span>🔖</span>
-                    </div>
-                    <div class="post-caption">
-                        <b>${data.username || 'anonymous'}</b>
-                        <p>${escapeHTML(data.caption || '')}</p>
-                    </div>
-                </article>
-            `;
-            feedElement.innerHTML += cardMarkup;
-        }
-    } catch (e) {
-        feedElement.innerHTML = `<div style="text-align:center;padding:20px;color:#ff4d4d;">Timeline compilation tracking structural fault.</div>`;
-    }
+
+
+
+window.addComment=async function(id){
+
+
+let input=document.getElementById(
+"comment-"+id
+);
+
+
+let text=input.value.trim();
+
+
+
+if(!text)return;
+
+
+
+let ref=doc(db,"posts",id);
+
+
+
+await updateDoc(ref,{
+
+
+comments:arrayUnion({
+
+user:user,
+
+text:text
+
+})
+
+
+});
+
+
+
+input.value="";
+
+
+loadPosts();
+
+
+
 }
 
-function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t));
+
+
+
+
+
+
+
+function escapeHTML(str){
+
+
+return str.replace(/[&<>'"]/g,
+
+c=>({
+
+"&":"&amp;",
+
+"<":"&lt;",
+
+">":"&gt;",
+
+"'":"&#39;",
+
+'"':"&quot;"
+
+}[c])
+
+);
+
+
 }
 
-const runtimeLogout = document.getElementById("headerLogoutBtn");
-if (runtimeLogout) {
-    runtimeLogout.addEventListener("click", () => {
-        localStorage.removeItem("RHKUser");
-        window.location.href = "index.html";
-    });
-}
 
-renderLifecycleComponents();
 
+
+
+
+document
+.getElementById("headerLogoutBtn")
+?.addEventListener("click",()=>{
+
+
+localStorage.removeItem("RHKUser");
+
+location.href="index.html";
+
+
+});
+
+
+
+
+
+loadPosts();
