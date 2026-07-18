@@ -14,12 +14,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Direct Gateway Session Interceptor
 if (!localStorage.getItem("RHKUser") && !window.location.pathname.includes("index.html") && !window.location.pathname.includes("signup.html")) {
     window.location.href = "index.html";
 }
 
-// -------------------- REGISTRATION DISPATCHER --------------------
+// Helper to ensure user metadata structure exists
+async function initializeUserMetadata(username) {
+    const metaRef = doc(db, "profiles", username);
+    const metaSnap = await getDoc(metaRef);
+    if (!metaSnap.exists()) {
+        await setDoc(metaRef, {
+            username: username,
+            avatar: `https://i.pravatar.cc/150?u=${username}`,
+            bio: "Hello, I am using RHK Application Network System Model."
+        });
+    }
+}
+
 const signupBtn = document.getElementById("signupBtn");
 if (signupBtn) {
     signupBtn.addEventListener("click", async () => {
@@ -29,37 +40,35 @@ if (signupBtn) {
 
         if (!username || !password) {
             msg.style.color = "#ff4d4d";
-            msg.innerText = "Please complete all fields.";
+            msg.innerText = "Provide complete registration arguments.";
             return;
         }
 
         try {
             msg.style.color = "#a8a8a8";
-            msg.innerText = "Verifying availability...";
-            
+            msg.innerText = "Verifying target unique identity entry availability...";
             const userRef = doc(db, "users", username);
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
                 msg.style.color = "#ff4d4d";
-                msg.innerText = "Username is already taken.";
+                msg.innerText = "Identity record string entry key conflict.";
                 return;
             }
 
             await setDoc(userRef, { username, password });
+            await initializeUserMetadata(username);
             
             msg.style.color = "lightgreen";
-            msg.innerText = "Account security structured. Redirecting...";
-            
+            msg.innerText = "System identity operational structure active. Shifting view...";
             setTimeout(() => { window.location.href = "index.html"; }, 1200);
         } catch (err) {
             msg.style.color = "#ff4d4d";
-            msg.innerText = "Network transmission error.";
+            msg.innerText = "Transmission validation structure crash.";
         }
     });
 }
 
-// -------------------- AUTHENTICATION INTERACTION --------------------
 const loginBtn = document.getElementById("loginBtn");
 if (loginBtn) {
     loginBtn.addEventListener("click", async () => {
@@ -69,34 +78,34 @@ if (loginBtn) {
 
         if (!username || !password) {
             msg.style.color = "#ff4d4d";
-            msg.innerText = "Missing input credentials.";
+            msg.innerText = "Credentials entry vectors missing components.";
             return;
         }
 
         try {
             msg.style.color = "#a8a8a8";
-            msg.innerText = "Authorizing identity...";
-            
+            msg.innerText = "Authorizing dynamic signature validations...";
             const userRef = doc(db, "users", username);
             const userSnap = await getDoc(userRef);
 
             if (!userSnap.exists()) {
                 msg.style.color = "#ff4d4d";
-                msg.innerText = "Account matching identity not found.";
+                msg.innerText = "Target operational database query result empty.";
                 return;
             }
 
             if (userSnap.data().password !== password) {
                 msg.style.color = "#ff4d4d";
-                msg.innerText = "Incorrect security clearance password.";
+                msg.innerText = "Security token mismatch criteria evaluated.";
                 return;
             }
 
+            await initializeUserMetadata(username);
             localStorage.setItem("RHKUser", username);
             window.location.href = "home.html";
         } catch (err) {
             msg.style.color = "#ff4d4d";
-            msg.innerText = "Authentication engine timeout.";
+            msg.innerText = "Identity authorization pipeline interface lock fail.";
         }
     });
 }
