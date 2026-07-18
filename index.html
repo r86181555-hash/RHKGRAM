@@ -1,54 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RHK Login</title>
-
-<link rel="stylesheet" href="style.css">
-
-<script type="module" src="app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RHK - Log In</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="app.js"></script>
 </head>
-
 <body>
 
-<div class="container">
-
-<div class="login-box">
-
-<h1 class="logo">RHK</h1>
-
-<p class="subtitle">Welcome Back</p>
-
-<input
-type="text"
-id="loginUsername"
-placeholder="Username"
->
-
-<input
-type="password"
-id="loginPassword"
-placeholder="Password"
->
-
-<button id="loginBtn">
-Log In
-</button>
-
-<p id="loginMessage"></p>
-
-<div class="divider">
-OR
-</div>
-
-<a href="signup.html" class="signupLink">
-Create New Account
-</a>
-
-</div>
-
-</div>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 class="logo">RHK</h1>
+            <p class="subtitle">Connect with your world.</p>
+            
+            <div class="auth-form">
+                <input type="text" id="loginUsername" placeholder="Username" autocomplete="username">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button id="loginBtn">Log In</button>
+            </div>
+            
+            <p id="loginMessage" class="auth-message"></p>
+            
+            <div class="divider">OR</div>
+            
+            <a href="signup.html" class="signupLink">Create New Account</a>
+        </div>
+    </div>
 
 </body>
 </html>
