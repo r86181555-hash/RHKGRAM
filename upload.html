@@ -3,41 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RHK - New Post</title>
+    <title>RHK - Compose Stage</title>
     <link rel="stylesheet" href="style.css">
     <script type="module" src="upload.js"></script>
 </head>
 <body>
-
     <div class="app-shell">
         <header class="app-header">
-            <div class="logo">Create Post</div>
-            <div class="header-actions">
-                <a href="home.html" class="nav-item" style="font-size: 20px;">✕</a>
-            </div>
+            <div class="header-title">Create Post</div>
+            <div class="header-actions"><a href="home.html" class="nav-item" style="font-size:18px;">✕</a></div>
         </header>
-
         <main class="creator-container">
             <div class="file-dropzone" id="dropzone">
-                <span id="dropzoneText">📸 Tap to Select Image</span>
+                <span id="dropzoneText">📸 Select Target Image Visual Asset</span>
                 <input type="file" id="image" accept="image/*">
-                <img id="preview" class="preview-thumbnail" alt="Selected Preview">
+                <img id="preview" class="preview-thumbnail" alt="Selected Document Preview">
             </div>
-
-            <textarea id="caption" class="creator-textarea" placeholder="Write an expressive caption..."></textarea>
-            
-            <button id="uploadBtn">Share Post</button>
-            <p id="status" class="auth-message"></p>
+            <textarea id="caption" class="creator-textarea" placeholder="Write context description details..."></textarea>
+            <button id="uploadBtn">Publish Update</button>
+            <p id="status" class="auth-message" style="text-align:center;"></p>
         </main>
-
         <nav class="navigation-bar">
             <a href="home.html" class="nav-item">🏠</a>
-            <a href="#" class="nav-item">🔍</a>
+            <a href="messages.html" class="nav-item">🔍</a>
             <a href="upload.html" class="nav-item">➕</a>
-            <a href="#" class="nav-item">❤️</a>
-            <a href="#" class="nav-item">👤</a>
+            <a href="messages.html" class="nav-item">💬</a>
+            <a href="profile.html" class="nav-item">👤</a>
         </nav>
     </div>
-
 </body>
 </html>
