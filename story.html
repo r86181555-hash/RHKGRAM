@@ -5,88 +5,121 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-<title>RHK Story</title>
+<title>RHK Stories</title>
 
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <script type="module" src="story.js"></script>
 
 </head>
 
-
 <body>
 
+<div class="app">
 
-<div class="app-shell">
+<header class="topbar">
 
+<a href="home.html">
 
-<header class="app-header">
+<i class="fa-solid fa-arrow-left icon"></i>
+
+</a>
 
 <div class="logo">
-Story
+
+RHK Stories
+
 </div>
 
-<a href="home.html" class="icon-btn">
-✕
-</a>
+<i class="fa-solid fa-camera icon"></i>
 
 </header>
 
+<div style="padding:20px;">
 
+<div style="text-align:center;">
 
-<div style="padding:20px">
+<img
+id="preview"
+src="https://via.placeholder.com/300x500?text=Story+Preview"
+style="
+width:100%;
+max-height:420px;
+object-fit:cover;
+border-radius:15px;
+background:#111;
+">
 
-
-<h2>Add Story</h2>
+</div>
 
 <br>
 
-
-<input 
+<input
 type="file"
 id="storyFile"
-accept="image/*,video/*"
->
-
+accept="image/*,video/*">
 
 <br><br>
 
+<textarea
+id="storyCaption"
+placeholder="Write a caption..."
+style="
+width:100%;
+height:100px;
+"></textarea>
+
+<br><br>
 
 <button id="uploadStory">
+
 Upload Story
+
 </button>
 
+<p
+id="status"
+style="
+text-align:center;
+margin-top:15px;
+color:#888;
+">
 
-<p id="storyStatus"></p>
-
-
-
-</div>
-
-
-
-
-<hr>
-
-
-
-<h2 style="padding:15px">
-Stories
-</h2>
-
-
-
-<div id="storyView">
+</p>
 
 </div>
 
+<h3 style="padding:15px;">
 
+Recent Stories
+
+</h3>
+
+<div
+id="storyFeed"
+class="stories">
 
 </div>
 
+<nav class="bottom">
 
-</body>
+<a href="home.html">
+<i class="fa-solid fa-house"></i>
+</a>
 
-</html>
+<a href="search.html">
+<i class="fa-solid fa-magnifying-glass"></i>
+</a>
+
+<a href="upload.html">
+<i class="fa-regular fa-square-plus"></i>
+</a>
+
+<a href="reels.html">
+<i class="
