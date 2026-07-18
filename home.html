@@ -4,61 +4,194 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RHK</title>
+
 <link rel="stylesheet" href="style.css">
+
+<style>
+body{
+margin:0;
+background:#000;
+font-family:Arial,sans-serif;
+color:white;
+padding-bottom:70px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+border-bottom:1px solid #222;
+position:sticky;
+top:0;
+background:#000;
+}
+
+.logo{
+font-size:30px;
+font-weight:bold;
+color:#fff;
+}
+
+.icons{
+font-size:26px;
+display:flex;
+gap:15px;
+}
+
+.stories{
+display:flex;
+overflow-x:auto;
+padding:15px;
+gap:15px;
+border-bottom:1px solid #222;
+}
+
+.story{
+text-align:center;
+min-width:80px;
+}
+
+.story img{
+width:70px;
+height:70px;
+border-radius:50%;
+border:3px solid #ff3b5c;
+}
+
+.story p{
+font-size:12px;
+}
+
+.post{
+margin-top:20px;
+}
+
+.post-header{
+display:flex;
+align-items:center;
+padding:10px;
+}
+
+.post-header img{
+width:40px;
+height:40px;
+border-radius:50%;
+margin-right:10px;
+}
+
+.post-image{
+width:100%;
+}
+
+.post-actions{
+font-size:28px;
+padding:10px;
+display:flex;
+gap:18px;
+}
+
+.post-text{
+padding:0 10px 15px;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:60px;
+background:#111;
+display:flex;
+justify-content:space-around;
+align-items:center;
+font-size:28px;
+border-top:1px solid #222;
+}
+</style>
+
 </head>
 
-<body style="background:#000;color:white;margin:0;font-family:Arial,sans-serif;">
+<body>
 
-<header style="display:flex;justify-content:space-between;align-items:center;padding:15px;border-bottom:1px solid #333;">
-<h2>RHK</h2>
-<div>
-<span style="font-size:24px;">❤</span>
-<span style="font-size:24px;margin-left:15px;">✉</span>
+<div class="header">
+
+<div class="logo">
+RHK
 </div>
-</header>
 
-<div style="display:flex;overflow-x:auto;padding:10px;border-bottom:1px solid #222;gap:15px;">
+<div class="icons">
+🔔
+💬
+</div>
 
-<div style="text-align:center">
-<img src="https://via.placeholder.com/70" style="border-radius:50%">
+</div>
+
+<div class="stories">
+
+<div class="story">
+<img src="https://i.pravatar.cc/150?img=1">
 <p>You</p>
 </div>
 
-<div style="text-align:center">
-<img src="https://via.placeholder.com/70" style="border-radius:50%">
-<p>RHK</p>
+<div class="story">
+<img src="https://i.pravatar.cc/150?img=2">
+<p>Alex</p>
 </div>
 
-<div style="text-align:center">
-<img src="https://via.placeholder.com/70" style="border-radius:50%">
-<p>User</p>
+<div class="story">
+<img src="https://i.pravatar.cc/150?img=3">
+<p>Rahul</p>
 </div>
 
+<div class="story">
+<img src="https://i.pravatar.cc/150?img=4">
+<p>John</p>
 </div>
 
-<div style="padding:15px;">
-
-<h3>@raghav</h3>
-
-<img src="https://picsum.photos/400/400" style="width:100%;border-radius:10px;">
-
-<div style="font-size:28px;margin-top:10px;">
-❤ 💬 📤
+<div class="story">
+<img src="https://i.pravatar.cc/150?img=5">
+<p>Riya</p>
 </div>
-
-<p><b>120 Likes</b></p>
-
-<p>This is your first post.</p>
 
 </div>
 
-<nav style="position:fixed;bottom:0;left:0;width:100%;background:#111;border-top:1px solid #333;display:flex;justify-content:space-around;padding:12px 0;font-size:24px;">
+<div class="post">
+
+<div class="post-header">
+<img src="https://i.pravatar.cc/150?img=6">
+<b>raghav</b>
+</div>
+
+<img class="post-image" src="https://picsum.photos/500/500">
+
+<div class="post-actions">
+❤️
+💬
+📤
+🔖
+</div>
+
+<div class="post-text">
+<b>RHK</b><br>
+Welcome to the RHK Social App 🚀
+</div>
+
+</div>
+
+<div class="bottom-nav">
+
 🏠
+
 🔍
+
 ➕
-❤
+
+❤️
+
 👤
-</nav>
+
+</div>
 
 </body>
 </html>
