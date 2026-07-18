@@ -22,22 +22,17 @@
 <div class="app-shell">
 
 
-
 <header class="app-header">
 
 <div class="logo">
 RHK
 </div>
 
-
 <a href="home.html" class="icon-btn">
 ←
 </a>
 
-
 </header>
-
-
 
 
 
@@ -49,14 +44,14 @@ RHK
 id="profileDP"
 class="profile-dp"
 src="https://i.pravatar.cc/150"
+alt="Profile Picture"
 >
-
 
 
 <div class="profile-info">
 
 <h2 id="profileUsername">
-User
+Username
 </h2>
 
 
@@ -74,14 +69,11 @@ User
 
 
 
-
 <div class="profile-bio">
-
 
 <p id="profileBio">
 Bio
 </p>
-
 
 </div>
 
@@ -89,9 +81,15 @@ Bio
 
 
 
-
-
 <div style="padding:15px">
+
+
+<h3>
+Change Profile Picture
+</h3>
+
+
+<br>
 
 
 <input 
@@ -101,12 +99,19 @@ accept="image/*"
 >
 
 
+
 <br><br>
 
 
+
 <input
+
+type="text"
+
 id="bioInput"
-placeholder="Change bio"
+
+placeholder="Write your bio"
+
 style="
 width:100%;
 padding:12px;
@@ -115,10 +120,13 @@ color:white;
 border:1px solid #333;
 border-radius:10px;
 "
+
 >
 
 
+
 <br><br>
+
 
 
 <button id="saveProfile">
@@ -126,6 +134,7 @@ border-radius:10px;
 Save Profile
 
 </button>
+
 
 
 </div>
@@ -144,13 +153,13 @@ My Posts
 
 
 
+
 <div 
-class="profile-grid"
 id="myPosts"
+class="profile-grid"
 >
 
 </div>
-
 
 
 
@@ -170,6 +179,11 @@ id="myPosts"
 </a>
 
 
+<a href="messages.html" class="nav-item">
+💬
+</a>
+
+
 <a href="profile.html" class="nav-item">
 👤
 </a>
@@ -179,8 +193,8 @@ id="myPosts"
 
 
 
-
 </div>
+
 
 
 </body>
