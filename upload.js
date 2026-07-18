@@ -1,11 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
@@ -20,63 +14,86 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Authentication Verification System 
+const activeSessionIdentity = localStorage.getItem("RHKUser");
+if (!activeSessionIdentity) {
+    window.location.href = "index.html";
+}
+
 const CLOUD_NAME = "nhy9lfkt";
 const UPLOAD_PRESET = "rhk_upload";
 
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("image");
+const imagePreview = document.getElementById("preview");
+const dropzoneText = document.getElementById("dropzoneText");
 const uploadBtn = document.getElementById("uploadBtn");
+const processStatus = document.getElementById("status");
 
+// File Selection Management
+dropzone.addEventListener("click", () => fileInput.click());
+
+fileInput.addEventListener("change", (e) => {
+    const trackingFile = e.target.files[0];
+    if (trackingFile) {
+        const fileReader = new FileReader();
+        fileReader.onload = function(event) {
+            imagePreview.src = event.target.result;
+            imagePreview.style.display = "block";
+            dropzoneText.style.display = "none";
+        };
+        fileReader.readAsDataURL(trackingFile);
+    }
+});
+
+// Transaction Controller Execution Process
 uploadBtn.addEventListener("click", async () => {
+    const targetedFile = fileInput.files[0];
+    const extractedCaptionText = document.getElementById("caption").value.trim();
 
-    const imageFile = document.getElementById("image").files[0];
-    const caption = document.getElementById("caption").value.trim();
-    const status = document.getElementById("status");
-
-    if (!imageFile) {
-        status.innerText = "Please select an image.";
+    if (!targetedFile) {
+        processStatus.style.color = "#ff4d4d";
+        processStatus.innerText = "Select an image file before posting.";
         return;
     }
 
     try {
+        uploadBtn.disabled = true;
+        processStatus.style.color = "#a8a8a8";
+        processStatus.innerText = "Transmitting asset package to Cloudinary...";
 
-        status.innerText = "Uploading image...";
+        const dataBufferPack = new FormData();
+        dataBufferPack.append("file", targetedFile);
+        dataBufferPack.append("upload_preset", UPLOAD_PRESET);
 
-        const formData = new FormData();
-        formData.append("file", imageFile);
-        formData.append("upload_preset", UPLOAD_PRESET);
-
-        const response = await fetch(
+        const serverResponse = await fetch(
             `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-            {
-                method: "POST",
-                body: formData
-            }
+            { method: "POST", body: dataBufferPack }
         );
 
-        const data = await response.json();
+        if (!serverResponse.ok) throw new Error("Cloudinary engine distribution fault.");
+        const resolvedJSONPayload = await serverResponse.json();
 
-        if (!data.secure_url) {
-            throw new Error("Image upload failed.");
+        if (!resolvedJSONPayload.secure_url) {
+            throw new Error("Target file structural URL reference missing.");
         }
 
+        processStatus.innerText = "Writing document properties to database...";
+
         await addDoc(collection(db, "posts"), {
-            username: localStorage.getItem("RHKUser"),
-            caption: caption,
-            image: data.secure_url,
+            username: activeSessionIdentity,
+            caption: extractedCaptionText,
+            image: resolvedJSONPayload.secure_url,
             createdAt: serverTimestamp()
         });
 
-        status.style.color = "lightgreen";
-        status.innerText = "Post uploaded successfully.";
+        processStatus.style.color = "lightgreen";
+        processStatus.innerText = "Post added successfully! Returning home...";
 
-        setTimeout(() => {
-            window.location = "home.html";
-        }, 1500);
-
-    } catch (error) {
-
-        status.style.color = "red";
-        status.innerText = error.message;
-
+        setTimeout(() => { window.location.href = "home.html"; }, 1300);
+    } catch (transactionFault) {
+        uploadBtn.disabled = false;
+        processStatus.style.color = "#ff4d4d";
+        processStatus.innerText = transactionFault.message;
     }
-
 });
