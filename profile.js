@@ -1,6 +1,4 @@
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
 getFirestore,
 doc,
@@ -10,226 +8,136 @@ collection,
 getDocs,
 query,
 where
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-
-const firebaseConfig={
-apiKey:"AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
-authDomain:"rhk-app-e34c6.firebaseapp.com",
-projectId:"rhk-app-e34c6",
-storageBucket:"rhk-app-e34c6.firebasestorage.app",
-messagingSenderId:"1016565109006",
-appId:"1:1016565109006:web:eb7ec260a601a16e5ac75f"
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
+  authDomain: "rhk-app-e34c6.firebaseapp.com",
+  projectId: "rhk-app-e34c6",
+  storageBucket: "rhk-app-e34c6.firebasestorage.app",
+  messagingSenderId: "1016565109006",
+  appId: "1:1016565109006:web:eb7ec260a601a16e5ac75f",
+  measurementId: "G-814PTRRQVQ"
 };
 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-const app=initializeApp(firebaseConfig);
+const username = localStorage.getItem("RHKUser");
 
-const db=getFirestore(app);
+if (!username) {
+    location.href = "index.html";
+}
 
+const CLOUD_NAME = "nhy9lfkt";
+const UPLOAD_PRESET = "rhk_upload";
 
-const username=localStorage.getItem("RHKUser");
-
-
-const CLOUD_NAME="nhy9lfkt";
-const UPLOAD_PRESET="rhk_upload";
-
-
-const dp=document.getElementById("profileDP");
-const name=document.getElementById("profileUsername");
-const bio=document.getElementById("profileBio");
-const posts=document.getElementById("myPosts");
-
-const dpInput=document.getElementById("dpUpload");
-const save=document.getElementById("saveProfile");
-
-
+const profileDP = document.getElementById("profileDP");
+const usernameText = document.getElementById("username");
+const profileUsername = document.getElementById("profileUsername");
+const profileBio = document.getElementById("profileBio");
+const postCount = document.getElementById("postCount");
+const myPosts = document.getElementById("myPosts");
 
 async function loadProfile(){
 
+const userRef = doc(db,"users",username);
+const userSnap = await getDoc(userRef);
 
-const userRef=doc(db,"users",username);
+if(userSnap.exists()){
 
-const snap=await getDoc(userRef);
+const data = userSnap.data();
 
+usernameText.innerHTML = data.username;
+profileUsername.innerHTML = data.username;
 
-if(snap.exists()){
+profileDP.src = data.dp || "https://i.pravatar.cc/150";
 
-let data=snap.data();
-
-name.innerHTML=data.username;
-
-dp.src=data.dp || "https://i.pravatar.cc/150";
-
-bio.innerHTML=data.bio || "";
+profileBio.innerHTML = data.bio || "";
 
 }
 
-
-
-let q=query(
+const q = query(
 collection(db,"posts"),
 where("username","==",username)
 );
 
+const result = await getDocs(q);
 
-let result=await getDocs(q);
+postCount.innerHTML = result.size;
 
-
-posts.innerHTML="";
-
-
-document.getElementById("postCount").innerHTML=
-result.size+" Posts";
-
-
+myPosts.innerHTML="";
 
 result.forEach(post=>{
 
-
-let data=post.data();
-
+const data = post.data();
 
 if(data.type==="video"){
 
-posts.innerHTML+=`
-
-<video src="${data.media}"></video>
-
+myPosts.innerHTML += `
+<video controls>
+<source src="${data.media}">
+</video>
 `;
 
 }else{
 
-
-posts.innerHTML+=`
-
+myPosts.innerHTML += `
 <img src="${data.media}">
-
 `;
 
 }
 
-
 });
 
-
 }
-
-
 
 loadProfile();
 
+document.getElementById("saveProfile").onclick = async()=>{
 
+const bio = document.getElementById("bioInput").value;
 
+let imageURL = null;
 
-
-save.onclick=async()=>{
-
-
-try{
-
-
-// DP upload
-
-let file=dpInput.files[0];
-
-
-let imageURL=null;
-
-
+const file = document.getElementById("dpUpload").files[0];
 
 if(file){
 
-
-let form=new FormData();
-
+const form = new FormData();
 
 form.append("file",file);
 
-form.append(
-"upload_preset",
-UPLOAD_PRESET
-);
+form.append("upload_preset",UPLOAD_PRESET);
 
-
-
-let upload=await fetch(
-
+const upload = await fetch(
 `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-
 {
-
 method:"POST",
-
 body:form
-
 }
-
 );
 
+const cloud = await upload.json();
 
-
-let data=await upload.json();
-
-
-imageURL=data.secure_url;
-
+imageURL = cloud.secure_url;
 
 }
 
+const update = {};
 
+if(bio!="") update.bio = bio;
 
-
-
-let bioText=document
-.getElementById("bioInput")
-.value;
-
-
-
-
-let updateData={
-
-bio:bioText
-
-};
-
-
-
-if(imageURL){
-
-updateData.dp=imageURL;
-
-}
-
-
-
+if(imageURL) update.dp = imageURL;
 
 await updateDoc(
-
 doc(db,"users",username),
-
-updateData
-
+update
 );
 
+alert("Profile Updated");
 
-
-alert("Profile updated ✅");
-
-
-location.reload();
-
-
-
-}
-
-catch(error){
-
-alert(error.message);
-
-}
-
+loadProfile();
 
 };
