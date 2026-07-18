@@ -1,18 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
-getFirestore,
-collection,
-addDoc,
-serverTimestamp
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHUju18VBAdDFoQJhsVWp7oUqBxhfwThE",
@@ -25,59 +18,65 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-const storage = getStorage(app);
+
+const CLOUD_NAME = "nhy9lfkt";
+const UPLOAD_PRESET = "rhk_upload";
 
 const uploadBtn = document.getElementById("uploadBtn");
 
 uploadBtn.addEventListener("click", async () => {
 
-const image = document.getElementById("image").files[0];
+    const imageFile = document.getElementById("image").files[0];
+    const caption = document.getElementById("caption").value.trim();
+    const status = document.getElementById("status");
 
-const caption = document.getElementById("caption").value;
+    if (!imageFile) {
+        status.innerText = "Please select an image.";
+        return;
+    }
 
-const status = document.getElementById("status");
+    try {
 
-if (!image) {
-status.innerText = "Please choose an image.";
-return;
-}
+        status.innerText = "Uploading image...";
 
-try {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("upload_preset", UPLOAD_PRESET);
 
-status.innerText = "Uploading...";
+        const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
 
-const imageRef = ref(storage, "posts/" + Date.now() + "_" + image.name);
+        const data = await response.json();
 
-await uploadBytes(imageRef, image);
+        if (!data.secure_url) {
+            throw new Error("Image upload failed.");
+        }
 
-const imageURL = await getDownloadURL(imageRef);
+        await addDoc(collection(db, "posts"), {
+            username: localStorage.getItem("RHKUser"),
+            caption: caption,
+            image: data.secure_url,
+            createdAt: serverTimestamp()
+        });
 
-await addDoc(collection(db, "posts"), {
+        status.style.color = "lightgreen";
+        status.innerText = "Post uploaded successfully.";
 
-image: imageURL,
+        setTimeout(() => {
+            window.location = "home.html";
+        }, 1500);
 
-caption: caption,
+    } catch (error) {
 
-username: localStorage.getItem("RHKUser"),
+        status.style.color = "red";
+        status.innerText = error.message;
 
-createdAt: serverTimestamp()
-
-});
-
-status.style.color = "lightgreen";
-status.innerText = "Post uploaded successfully!";
-
-setTimeout(() => {
-window.location = "home.html";
-}, 1500);
-
-} catch (err) {
-
-status.style.color = "red";
-status.innerText = err.message;
-
-}
+    }
 
 });
