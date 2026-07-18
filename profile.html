@@ -1,44 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RHK - Profile Node</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="profile.js"></script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RHK Profile</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="profile.js"></script>
+
 </head>
+
+
 <body>
-    <div class="app-shell">
-        <header class="app-header">
-            <div class="header-title">Edit Profile</div>
-            <div class="header-actions"><a href="home.html" class="nav-item" style="font-size:18px;">✕</a></div>
-        </header>
-        <main class="profile-container">
-            <div class="profile-meta-block">
-                <div class="profile-avatar-frame" id="avatarUploadTrigger" title="Update Profile Picture">
-                    <img class="profile-dp" id="profileDisplayImage" src="https://i.pravatar.cc/150?img=placeholder" alt="Avatar">
-                    <div class="profile-dp-overlay">📷</div>
-                    <input type="file" id="profileFileInput" accept="image/*" style="display:none;">
-                </div>
-                <div class="profile-identity">
-                    <h2 class="profile-username-heading" id="profileUsernameTitle">@username</h2>
-                    <p style="font-size:12px; color:#737373;">Click avatar image container node to modify.</p>
-                </div>
-            </div>
-            <div class="auth-form" style="text-align:left;">
-                <label style="font-size:12px; color:#a8a8a8; margin-left:4px;">Account Narrative Bio Data</label>
-                <textarea id="profileBio" class="profile-bio-textarea" placeholder="Describe account details context..."></textarea>
-                <button id="saveProfileBtn">Update Profile Configurations</button>
-            </div>
-            <p id="profileStatus" class="auth-message" style="text-align:center;"></p>
-        </main>
-        <nav class="navigation-bar">
-            <a href="home.html" class="nav-item">🏠</a>
-            <a href="messages.html" class="nav-item">🔍</a>
-            <a href="upload.html" class="nav-item">➕</a>
-            <a href="messages.html" class="nav-item">💬</a>
-            <a href="profile.html" class="nav-item">👤</a>
-        </nav>
-    </div>
+
+
+<div class="app-shell">
+
+
+
+<header class="app-header">
+
+<div class="logo">
+RHK
+</div>
+
+
+<a href="home.html" class="icon-btn">
+←
+</a>
+
+
+</header>
+
+
+
+
+
+
+<section class="profile-header">
+
+
+<img 
+id="profileDP"
+class="profile-dp"
+src="https://i.pravatar.cc/150"
+>
+
+
+
+<div class="profile-info">
+
+<h2 id="profileUsername">
+User
+</h2>
+
+
+<p id="postCount">
+0 Posts
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<div class="profile-bio">
+
+
+<p id="profileBio">
+Bio
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div style="padding:15px">
+
+
+<input 
+type="file"
+id="dpUpload"
+accept="image/*"
+>
+
+
+<br><br>
+
+
+<input
+id="bioInput"
+placeholder="Change bio"
+style="
+width:100%;
+padding:12px;
+background:#111;
+color:white;
+border:1px solid #333;
+border-radius:10px;
+"
+>
+
+
+<br><br>
+
+
+<button id="saveProfile">
+
+Save Profile
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<h3 style="padding:15px">
+
+My Posts
+
+</h3>
+
+
+
+<div 
+class="profile-grid"
+id="myPosts"
+>
+
+</div>
+
+
+
+
+
+
+
+<nav class="navigation-bar">
+
+
+<a href="home.html" class="nav-item">
+🏠
+</a>
+
+
+<a href="upload.html" class="nav-item">
+➕
+</a>
+
+
+<a href="profile.html" class="nav-item">
+👤
+</a>
+
+
+</nav>
+
+
+
+
+</div>
+
+
 </body>
+
 </html>
