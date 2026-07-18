@@ -1,57 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RHK</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="feed.js"></script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RHK</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="feed.js"></script>
+
 </head>
+
+
 <body>
-    <div class="app-shell">
-        <header class="app-header">
-            <div class="logo">RHK</div>
-            <div class="header-actions">
-                <a href="messages.html" class="icon-link" title="Direct Messaging Channel">💬</a>
-                <button class="icon-link" id="headerLogoutBtn" title="Terminate Session Stack">🚪</button>
-            </div>
-        </header>
 
-        <!-- Dynamic Stories Module -->
-        <div class="stories-strip" id="storiesStrip">
-            <div class="story-node empty-story" id="currentUserStoryNode">
-                <div class="story-ring">
-                    <img id="currentUserStoryAvatar" src="https://i.pravatar.cc/150?img=placeholder" alt="User">
-                </div>
-                <div class="story-add-badge">+</div>
-                <div class="story-label">Your Story</div>
-                <input type="file" id="storyFileInput" accept="image/*" style="display:none;">
-            </div>
-            <div id="dynamicStoriesContainer" style="display: flex; gap: 14px;"></div>
-        </div>
 
-        <main id="feed" class="feed-stream"></main>
+<div class="app-shell">
 
-        <nav class="navigation-bar">
-            <a href="home.html" class="nav-item">🏠</a>
-            <a href="messages.html" class="nav-item">🔍</a>
-            <a href="upload.html" class="nav-item">➕</a>
-            <a href="messages.html" class="nav-item">💬</a>
-            <a href="profile.html" class="nav-item">👤</a>
-        </nav>
-    </div>
 
-    <!-- Screen Layer Overlay for Displaying Running Stories -->
-    <div class="story-modal" id="storyModal">
-        <div class="story-modal-progress"><div class="story-modal-bar" id="storyModalBar"></div></div>
-        <div class="story-modal-header">
-            <img class="story-modal-avatar" id="storyModalAvatar" src="" alt="">
-            <span class="story-modal-user" id="storyModalUser">username</span>
-        </div>
-        <button class="story-modal-close" id="storyModalClose">✕</button>
-        <div class="story-modal-content">
-            <img class="story-modal-img" id="storyModalImage" src="" alt="Story content presentation element">
-        </div>
-    </div>
+<header class="app-header">
+
+<div class="logo">
+RHK
+</div>
+
+
+<div class="header-actions">
+
+<a href="messages.html" class="icon-btn">
+💬
+</a>
+
+
+<a href="profile.html" class="icon-btn">
+👤
+</a>
+
+
+<button id="headerLogoutBtn" class="icon-btn">
+🚪
+</button>
+
+
+</div>
+
+
+</header>
+
+
+
+
+
+<!-- STORIES -->
+
+
+<div class="stories-container" id="stories">
+
+
+<div class="story-wrapper">
+
+<a href="story.html">
+
+<div class="story-avatar-ring">
+
+<img src="https://i.pravatar.cc/150?img=11">
+
+</div>
+
+</a>
+
+<div class="story-username">
+Your Story
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="story-wrapper">
+
+<div class="story-avatar-ring">
+
+<img src="https://i.pravatar.cc/150?img=22">
+
+</div>
+
+<div class="story-username">
+alex
+</div>
+
+</div>
+
+
+
+
+
+<div class="story-wrapper">
+
+<div class="story-avatar-ring">
+
+<img src="https://i.pravatar.cc/150?img=33">
+
+</div>
+
+<div class="story-username">
+sarah
+</div>
+
+</div>
+
+
+
+
+
+<div class="story-wrapper">
+
+<div class="story-avatar-ring">
+
+<img src="https://i.pravatar.cc/150?img=44">
+
+</div>
+
+<div class="story-username">
+developer
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- FEED -->
+
+<main id="feed" class="feed-stream">
+
+
+<div style="text-align:center;padding:40px">
+
+Loading RHK feed...
+
+</div>
+
+
+</main>
+
+
+
+
+
+
+
+
+<!-- BOTTOM NAV -->
+
+
+<nav class="navigation-bar">
+
+
+<a href="home.html" class="nav-item">
+🏠
+</a>
+
+
+<a href="#" class="nav-item">
+🔍
+</a>
+
+
+<a href="upload.html" class="nav-item">
+➕
+</a>
+
+
+<a href="#" class="nav-item">
+❤️
+</a>
+
+
+<a href="profile.html" class="nav-item">
+👤
+</a>
+
+
+</nav>
+
+
+
+</div>
+
+
+
+
 </body>
+
+
 </html>
