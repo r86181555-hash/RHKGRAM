@@ -1,210 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
 
 <title>RHK</title>
 
 <link rel="stylesheet" href="style.css">
 
-<script type="module" src="feed.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+<script type="module" src="home.js"></script>
 
 </head>
 
-
 <body>
 
+<div class="app">
 
-<div class="app-shell">
+<!-- TOP -->
 
-
-<header class="app-header">
+<header class="topbar">
 
 <div class="logo">
 RHK
 </div>
 
+<div>
 
-<div class="header-actions">
+<i class="fa-regular fa-heart icon"></i>
 
-<a href="messages.html" class="icon-btn">
-💬
+<a href="messages.html">
+
+<i class="fa-regular fa-paper-plane icon"></i>
+
 </a>
-
-
-<a href="profile.html" class="icon-btn">
-👤
-</a>
-
-
-<button id="headerLogoutBtn" class="icon-btn">
-🚪
-</button>
-
 
 </div>
-
 
 </header>
 
-
-
-
-
 <!-- STORIES -->
 
-
-<div class="stories-container" id="stories">
-
-
-<div class="story-wrapper">
-
-<a href="story.html">
-
-<div class="story-avatar-ring">
-
-<img src="https://i.pravatar.cc/150?img=11">
+<div
+class="stories"
+id="stories">
 
 </div>
+
+<!-- POSTS -->
+
+<div
+id="feed">
+
+</div>
+
+<!-- NAVIGATION -->
+
+<nav class="bottom">
+
+<a href="home.html">
+
+<i class="fa-solid fa-house"></i>
 
 </a>
 
-<div class="story-username">
-Your Story
-</div>
+<a href="search.html">
 
+<i class="fa-solid fa-magnifying-glass"></i>
 
-</div>
-
-
-
-
-
-<div class="story-wrapper">
-
-<div class="story-avatar-ring">
-
-<img src="https://i.pravatar.cc/150?img=22">
-
-</div>
-
-<div class="story-username">
-alex
-</div>
-
-</div>
-
-
-
-
-
-<div class="story-wrapper">
-
-<div class="story-avatar-ring">
-
-<img src="https://i.pravatar.cc/150?img=33">
-
-</div>
-
-<div class="story-username">
-sarah
-</div>
-
-</div>
-
-
-
-
-
-<div class="story-wrapper">
-
-<div class="story-avatar-ring">
-
-<img src="https://i.pravatar.cc/150?img=44">
-
-</div>
-
-<div class="story-username">
-developer
-</div>
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- FEED -->
-
-<main id="feed" class="feed-stream">
-
-
-<div style="text-align:center;padding:40px">
-
-Loading RHK feed...
-
-</div>
-
-
-</main>
-
-
-
-
-
-
-
-
-<!-- BOTTOM NAV -->
-
-
-<nav class="navigation-bar">
-
-
-<a href="home.html" class="nav-item">
-🏠
 </a>
 
+<a href="upload.html">
 
-<a href="#" class="nav-item">
-🔍
+<i class="fa-regular fa-square-plus"></i>
+
 </a>
 
+<a href="reels.html">
 
-<a href="upload.html" class="nav-item">
-➕
+<i class="fa-solid fa-clapperboard"></i>
+
 </a>
 
+<a href="profile.html">
 
-<a href="#" class="nav-item">
-❤️
+<i class="fa-regular fa-circle-user"></i>
+
 </a>
-
-
-<a href="profile.html" class="nav-item">
-👤
-</a>
-
 
 </nav>
 
-
-
 </div>
 
-
-
-
 </body>
-
 
 </html>
