@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Post - RHK</title>
+
+<link rel="stylesheet" href="style.css">
+<script type="module" src="upload.js"></script>
+
+<style>
+body{
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+}
+
+textarea{
+width:100%;
+height:120px;
+margin-top:15px;
+background:#111;
+color:white;
+border:1px solid #333;
+border-radius:10px;
+padding:10px;
+font-size:16px;
+}
+
+input[type=file]{
+margin-top:20px;
+width:100%;
+color:white;
+}
+
+button{
+margin-top:20px;
+width:100%;
+padding:14px;
+background:#0095f6;
+border:none;
+border-radius:10px;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+#status{
+margin-top:20px;
+text-align:center;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Create Post</h1>
+
+<input type="file" id="image">
+
+<textarea
+id="caption"
+placeholder="Write a caption...">
+</textarea>
+
+<button id="uploadBtn">
+Upload
+</button>
+
+<p id="status"></p>
+
+</div>
+
+</body>
+</html>
