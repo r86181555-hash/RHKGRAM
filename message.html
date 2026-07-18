@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RHK - Messaging Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="messages.js"></script>
+</head>
+<body>
+    <div class="app-shell">
+        <!-- Direct Dynamic Message View Layer -->
+        <div id="usersListView" class="messenger-container">
+            <header class="app-header">
+                <div class="header-title">Messages</div>
+                <div class="header-actions"><a href="home.html" class="icon-link">✕</a></div>
+            </header>
+            <div class="messenger-users-list" id="usersListTarget">
+                <div style="text-align:center; padding:20px; color:#737373;">Loading chat communication indexes...</div>
+            </div>
+        </div>
+
+        <!-- Single Channel Interactivity View Pane -->
+        <div id="chatPaneView" class="messenger-pane">
+            <header class="app-header">
+                <div class="header-actions">
+                    <button class="icon-link" id="closeChatBtn" style="font-size:18px;">⬅️</button>
+                </div>
+                <div class="header-title" id="chatTargetTitle">Chat</div>
+                <div style="width:24px;"></div>
+            </header>
+            <div class="chat-messages-history" id="chatHistoryBox"></div>
+            <div class="chat-input-dock">
+                <input type="text" id="chatMessageInput" class="chat-input-field" placeholder="Message...">
+                <button id="sendChatBtn" class="chat-send-btn">Send</button>
+            </div>
+        </div>
+
+        <nav class="navigation-bar">
+            <a href="home.html" class="nav-item">🏠</a>
+            <a href="messages.html" class="nav-item">🔍</a>
+            <a href="upload.html" class="nav-item">➕</a>
+            <a href="messages.html" class="nav-item">💬</a>
+            <a href="profile.html" class="nav-item">👤</a>
+        </nav>
+    </div>
+</body>
+</html>
+
