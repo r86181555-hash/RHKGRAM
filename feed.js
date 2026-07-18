@@ -25,18 +25,28 @@ const feed = document.getElementById("feed");
 
 async function loadPosts() {
 
-    feed.innerHTML = "<h2 style='text-align:center'>Loading...</h2>";
-
     const q = query(
         collection(db, "posts"),
         orderBy("createdAt", "desc")
     );
 
-    const snap = await getDocs(q);
+    const snapshot = await getDocs(q);
 
     feed.innerHTML = "";
 
-    snap.forEach(doc => {
+    if (snapshot.empty) {
+
+        feed.innerHTML = `
+        <div style="text-align:center;padding:40px;">
+            <h2>No Posts Yet</h2>
+            <p>Create your first post.</p>
+        </div>
+        `;
+
+        return;
+    }
+
+    snapshot.forEach(doc => {
 
         const post = doc.data();
 
@@ -46,20 +56,46 @@ async function loadPosts() {
 
 <div class="post-header">
 
-<b>${post.username}</b>
+<img src="https://i.pravatar.cc/150?u=${post.username}">
+
+<div class="username">
+
+${post.username}
 
 </div>
 
-<img class="post-image"
-src="${post.image}">
+</div>
+
+<img
+class="post-image"
+src="${post.image}"
+>
 
 <div class="post-actions">
 
-❤️ 💬 📤
+<div class="left-actions">
+
+<span>❤️</span>
+
+<span>💬</span>
+
+<span>📤</span>
 
 </div>
 
-<div class="post-text">
+<div>
+
+🔖
+
+</div>
+
+</div>
+
+<div class="post-caption">
+
+<b>${post.username}</b>
+
+<br><br>
 
 ${post.caption}
 
