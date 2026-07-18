@@ -1,27 +1,31 @@
 body {
-  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    font-family: sans-serif;
 }
-.glass-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  padding: 40px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  text-align: center;
+.glass-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    text-align: center;
+    color: white;
 }
+.logo { font-size: 2rem; margin-bottom: 20px; }
 input {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255,255,255,0.2);
-  color: white;
+    width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2); color: white; box-sizing: border-box;
 }
-
+button {
+    width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 8px;
+    background: white; color: #833ab4; font-weight: bold; cursor: pointer;
+}
+.google-btn { background: #4285F4; color: white; }
+.divider { margin: 15px 0; font-size: 0.8rem; }
