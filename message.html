@@ -1,49 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RHK - Messaging Panel</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="messages.js"></script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RHK Messages</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script type="module" src="chat.js"></script>
+
 </head>
+
+
 <body>
-    <div class="app-shell">
-        <!-- Direct Dynamic Message View Layer -->
-        <div id="usersListView" class="messenger-container">
-            <header class="app-header">
-                <div class="header-title">Messages</div>
-                <div class="header-actions"><a href="home.html" class="icon-link">✕</a></div>
-            </header>
-            <div class="messenger-users-list" id="usersListTarget">
-                <div style="text-align:center; padding:20px; color:#737373;">Loading chat communication indexes...</div>
-            </div>
-        </div>
 
-        <!-- Single Channel Interactivity View Pane -->
-        <div id="chatPaneView" class="messenger-pane">
-            <header class="app-header">
-                <div class="header-actions">
-                    <button class="icon-link" id="closeChatBtn" style="font-size:18px;">⬅️</button>
-                </div>
-                <div class="header-title" id="chatTargetTitle">Chat</div>
-                <div style="width:24px;"></div>
-            </header>
-            <div class="chat-messages-history" id="chatHistoryBox"></div>
-            <div class="chat-input-dock">
-                <input type="text" id="chatMessageInput" class="chat-input-field" placeholder="Message...">
-                <button id="sendChatBtn" class="chat-send-btn">Send</button>
-            </div>
-        </div>
 
-        <nav class="navigation-bar">
-            <a href="home.html" class="nav-item">🏠</a>
-            <a href="messages.html" class="nav-item">🔍</a>
-            <a href="upload.html" class="nav-item">➕</a>
-            <a href="messages.html" class="nav-item">💬</a>
-            <a href="profile.html" class="nav-item">👤</a>
-        </nav>
-    </div>
+<div class="app-shell">
+
+
+<header class="app-header">
+
+<div class="logo">
+Messages
+</div>
+
+
+<a href="home.html" class="icon-btn">
+←
+</a>
+
+
+</header>
+
+
+
+
+<div class="chat-container">
+
+
+<h3>
+Chat with user
+</h3>
+
+
+<input 
+id="receiver"
+placeholder="Enter username"
+style="
+width:100%;
+padding:12px;
+background:#111;
+color:white;
+border:1px solid #333;
+border-radius:10px;
+margin:10px 0;
+"
+>
+
+
+
+
+<div id="messages">
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+<div class="chat-input">
+
+
+<input 
+id="messageText"
+placeholder="Type message..."
+>
+
+
+<button id="sendBtn">
+Send
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
 </body>
-</html>
 
+</html>
