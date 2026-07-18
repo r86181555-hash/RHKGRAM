@@ -8,53 +8,50 @@
     <script type="module" src="feed.js"></script>
 </head>
 <body>
-
     <div class="app-shell">
         <header class="app-header">
             <div class="logo">RHK</div>
             <div class="header-actions">
-                <button class="icon-btn" id="headerLogoutBtn" title="Logout">🚪</button>
+                <a href="messages.html" class="icon-link" title="Direct Messaging Channel">💬</a>
+                <button class="icon-link" id="headerLogoutBtn" title="Terminate Session Stack">🚪</button>
             </div>
         </header>
 
-        <!-- Stories Module -->
-        <div class="stories-container">
-            <div class="story-wrapper">
-                <div class="story-avatar-ring"><img src="https://i.pravatar.cc/150?img=11" alt="User"></div>
-                <div class="story-username">My Story</div>
+        <!-- Dynamic Stories Module -->
+        <div class="stories-strip" id="storiesStrip">
+            <div class="story-node empty-story" id="currentUserStoryNode">
+                <div class="story-ring">
+                    <img id="currentUserStoryAvatar" src="https://i.pravatar.cc/150?img=placeholder" alt="User">
+                </div>
+                <div class="story-add-badge">+</div>
+                <div class="story-label">Your Story</div>
+                <input type="file" id="storyFileInput" accept="image/*" style="display:none;">
             </div>
-            <div class="story-wrapper">
-                <div class="story-avatar-ring"><img src="https://i.pravatar.cc/150?img=22" alt="Alex"></div>
-                <div class="story-username">alex_k</div>
-            </div>
-            <div class="story-wrapper">
-                <div class="story-avatar-ring"><img src="https://i.pravatar.cc/150?img=33" alt="Sarah"></div>
-                <div class="story-username">sarah.dev</div>
-            </div>
-            <div class="story-wrapper">
-                <div class="story-avatar-ring"><img src="https://i.pravatar.cc/150?img=44" alt="James"></div>
-                <div class="story-username">james_prime</div>
-            </div>
-            <div class="story-wrapper">
-                <div class="story-avatar-ring"><img src="https://i.pravatar.cc/150?img=55" alt="Elena"></div>
-                <div class="story-username">elena_r</div>
-            </div>
+            <div id="dynamicStoriesContainer" style="display: flex; gap: 14px;"></div>
         </div>
 
-        <!-- Scrollable Feed Target Container -->
-        <main id="feed" class="feed-stream">
-            <!-- Dynamic context loads here -->
-        </main>
+        <main id="feed" class="feed-stream"></main>
 
-        <!-- Bottom Application Navigation Component -->
         <nav class="navigation-bar">
             <a href="home.html" class="nav-item">🏠</a>
-            <a href="#" class="nav-item">🔍</a>
+            <a href="messages.html" class="nav-item">🔍</a>
             <a href="upload.html" class="nav-item">➕</a>
-            <a href="#" class="nav-item">❤️</a>
-            <a href="#" class="nav-item">👤</a>
+            <a href="messages.html" class="nav-item">💬</a>
+            <a href="profile.html" class="nav-item">👤</a>
         </nav>
     </div>
 
+    <!-- Screen Layer Overlay for Displaying Running Stories -->
+    <div class="story-modal" id="storyModal">
+        <div class="story-modal-progress"><div class="story-modal-bar" id="storyModalBar"></div></div>
+        <div class="story-modal-header">
+            <img class="story-modal-avatar" id="storyModalAvatar" src="" alt="">
+            <span class="story-modal-user" id="storyModalUser">username</span>
+        </div>
+        <button class="story-modal-close" id="storyModalClose">✕</button>
+        <div class="story-modal-content">
+            <img class="story-modal-img" id="storyModalImage" src="" alt="Story content presentation element">
+        </div>
+    </div>
 </body>
 </html>
